@@ -1,0 +1,13 @@
+﻿<Window x:Class="Pro_saic.MenuPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pro_saic"
+        mc:Ignorable="d"
+        Title="MenuPage" Height="396.84" Width="622.348">
+    <Grid>
+        <Button x:Name="cmdMosaic" Content="Part A: Pro-Saic" HorizontalAlignment="Left" Height="62" Margin="185,65,0,0" VerticalAlignment="Top" Width="250" Click="cmdMosaic_Click"/>
+        <Button x:Name="cmdClassification" Content="Part B: Classification" HorizontalAlignment="Left" Height="62" Margin="185,152,0,0" VerticalAlignment="Top" Width="250" Click="cmdClassification_Click"/>
+    </Grid>
+</Window>

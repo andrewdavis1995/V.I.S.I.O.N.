@@ -7,21 +7,34 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="574.512" Width="954.6">
     <Grid>
+        <CheckBox x:Name="chkShowImage" Content="Show Image on Hover" HorizontalAlignment="Left" Height="20" Margin="650,510,0,0" VerticalAlignment="Top" Width="273" Checked="checkBoxGaussian_Checked" IsChecked="True" Unchecked="checkBoxGaussian_Unchecked"/>
+
         <Slider x:Name="trackbarColumns" HorizontalAlignment="Left" Height="33" Margin="23,235,0,0" VerticalAlignment="Top" Width="273" Maximum="300" Minimum="30" ValueChanged="trackbarColumns_ValueChanged" SmallChange="1" LargeChange="5" IsSnapToTickEnabled="True"/>
-        <Label x:Name="lblNumRows" Content="30" HorizontalAlignment="Left" Margin="134,159,0,0" VerticalAlignment="Top" Height="44" Width="32"/>
-        <Label x:Name="lblNumColumns" Content="30" HorizontalAlignment="Left" Margin="134,250,0,0" VerticalAlignment="Top" Height="44" Width="32"/>
+        <Label x:Name="lblNumRows" Content="30" HorizontalAlignment="Left" Margin="23,159,0,0" VerticalAlignment="Top" Height="31" Width="273" HorizontalContentAlignment="Center" />
+        <Label x:Name="lblNumColumns" Content="30" HorizontalAlignment="Left" Margin="23,250,0,0" VerticalAlignment="Top" Height="29" Width="273" HorizontalContentAlignment="Center"/>
         <Button x:Name="cmdGo" Content="GO" HorizontalAlignment="Left" Margin="23,448,0,0" VerticalAlignment="Top" Width="273" Height="81" Background="#FF38B400" Foreground="White" Click="cmdGo_Click"/>
         <Label x:Name="lblFileSelected" Content="Selected File: None" HorizontalAlignment="Left" Margin="23,83,0,0" VerticalAlignment="Top" Width="273" Height="77"/>
         <Button x:Name="cmdGo_Copy" Content="Select File" HorizontalAlignment="Left" Margin="23,26,0,0" VerticalAlignment="Top" Width="273" Height="57" Click="cmdSelectFile_Click"/>
-        <Image x:Name="imgOutput" HorizontalAlignment="Left" Height="457" Margin="320,26,0,0" VerticalAlignment="Top" Width="603"></Image>
-        <CheckBox x:Name="checkBoxGaussian" Content="Apply Gaussian Blurring" HorizontalAlignment="Left" Height="20" Margin="23,315,0,0" VerticalAlignment="Top" Width="273" Checked="checkBoxGaussian_Checked" IsChecked="False" Unchecked="checkBoxGaussian_Unchecked"/>
-        <Slider x:Name="trackbarGaussian" HorizontalAlignment="Left" Height="33" Margin="23,341,0,0" VerticalAlignment="Top" Width="273" Maximum="16" Minimum="1" SmallChange="1" LargeChange="3" IsSnapToTickEnabled="True" Value="2" IsEnabled="False" ValueChanged="trackbarGaussian_ValueChanged"/>
-        <Label x:Name="lblGaussian" Content="2" HorizontalAlignment="Left" Margin="134,356,0,0" VerticalAlignment="Top" Height="44" Width="32"/>
+        <Image x:Name="imgOutput" HorizontalAlignment="Left" Height="457" Margin="320,26,0,0" VerticalAlignment="Top" Width="603" MouseMove="imgOutput_MouseMove" Stretch="Fill" MouseLeave="imgOutput_MouseLeave"/>
+        <CheckBox x:Name="checkBoxGaussian" Content="Apply Gaussian Blurring" HorizontalAlignment="Left" Height="20" Margin="25,358,0,0" VerticalAlignment="Top" Width="273" Checked="checkBoxGaussian_Checked" IsChecked="False" Unchecked="checkBoxGaussian_Unchecked"/>
+        <Slider x:Name="trackbarGaussian" HorizontalAlignment="Left" Height="33" Margin="25,384,0,0" VerticalAlignment="Top" Width="273" Maximum="16" Minimum="1" SmallChange="1" LargeChange="3" IsSnapToTickEnabled="True" Value="2" IsEnabled="False" ValueChanged="trackbarGaussian_ValueChanged"/>
+        <Label x:Name="lblGaussian" Content="2" HorizontalAlignment="Left" Margin="136,399,0,0" VerticalAlignment="Top" Height="44" Width="32"/>
         <Slider x:Name="trackbarRows" HorizontalAlignment="Left" Height="33" Margin="23,144,0,0" VerticalAlignment="Top" Width="273" Maximum="300" Minimum="30" SmallChange="1" LargeChange="5" ValueChanged="trackbarRows_ValueChanged" IsSnapToTickEnabled="True"/>
         <Button x:Name="cmdSave" Content="Save" HorizontalAlignment="Left" Margin="415,505,0,0" VerticalAlignment="Top" Width="178" Height="24" Background="#FF828282" Foreground="White" Click="cmdSave_Click"/>
-        <Grid Background="Black" Opacity="0.9" Visibility="Visible" x:Name="Hidden">
+
+        <Grid Background="Black" Opacity="0.95" Visibility="Hidden" x:Name="Overlay">
             <Image x:Name="image" HorizontalAlignment="Left" Height="177" Margin="373,223,0,0" VerticalAlignment="Top" Width="189" Source="Resources/0.png"/>
         </Grid>
+        <Label x:Name="lblNumRows_Copy" Content="Rows:" HorizontalAlignment="Left" Margin="23,123,0,0" VerticalAlignment="Top" Height="25" Width="273" HorizontalContentAlignment="Center" />
+        <Label x:Name="lblNumRows_Copy1" Content="Columns:" HorizontalAlignment="Left" Margin="23,215,0,0" VerticalAlignment="Top" Height="25" Width="273" HorizontalContentAlignment="Center" />
+
+
+        <Canvas Panel.ZIndex="9" x:Name="HoverPanel" Visibility="Hidden" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top" Width="168" Background="Gray" Margin="700, 300">
+
+            <Image x:Name="imgHover" HorizontalAlignment="Left" Height="164" VerticalAlignment="Top" Width="168" MouseMove="imgOutput_MouseMove" Source="Resources/0.png"/>
+            <Label x:Name="lblImageDescription" VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Canvas.Top="169" Height="31" FontWeight="Bold" Foreground="White" HorizontalAlignment="Stretch" Width="158" Content="Description"/>
+
+        </Canvas>
 
     </Grid>
 </Window>

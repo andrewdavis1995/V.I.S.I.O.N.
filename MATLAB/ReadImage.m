@@ -1,7 +1,7 @@
-function toreturn = ReadImage(a, rows, columns, gaussian)
+function [toreturn, fileNames, fileDescs] = ReadImage(a, rows, columns, gaussian)
 
 % TODO: workout preallocating of arrays
-
+tic
 
 img = imread(a);
 
@@ -21,13 +21,17 @@ extraHeightAfter = round(1 / excessHeight);
 
 
 % read all training images in
-[images, avcolours, histograms] = ReadAllTrainingFiles('C:\Users\asuth\Desktop\Vision\Vision Assignment Images\Assignments\Images\out_natural_1k\', segmentHeight, segmentWidth);
+[images, avcolours, topcols, bottcols, allFileNames] = ReadAllTrainingFiles('C:\Users\asuth\Desktop\Vision\Training\Natural\', segmentHeight, segmentWidth);
 
 disp(strcat(int2str(length(images)), ' images found'));
 
 
 % create list of arrays
 l = [];
+
+fileNames = repmat({''},rows,columns);
+fileDescs = repmat({''},rows,columns);
+
 
 % image is accessible from id - modulus and division
 for i = 0:rows-1
@@ -48,19 +52,22 @@ for i = 0:rows-1
             columnEnd = columnEnd - 1;
         end
         
-        try
+         try
             image = img(rowStart:rowEnd, columnStart:columnEnd, :);
          
             % work out which image to use in place of the section
-            newimage = CalcReplacementImage(images, image, avcolours, histograms);
+            [newimage, filename, description] = CalcReplacementImage(images, image, avcolours, topcols, bottcols, segmentHeight, segmentWidth, allFileNames);
                 
             % (horizontally) add the image to the sub image (row image)
             innerImage = [innerImage newimage];
+            
+            fileNames{i + 1, j + 1} = char(filename);
+            fileDescs{i + 1, j + 1} = char(description);
 
-        catch 
-            %disp(strcat(i, '-', j,'-',rowEnd,'-', rowStart));
+         catch 
+            %disp('Error');
             %image = img(rowStart:rowEnd - 2, columnStart:columnEnd - 2, :);
-        end
+         end
     end
     
     % (vertically) add the row imageto the overall image
@@ -69,6 +76,8 @@ for i = 0:rows-1
 end
 
 %imshow(l);
+
+disp(fileNames{2,1});
 
 display('DONE');
 
@@ -80,6 +89,13 @@ if gaussian > 0
     toreturn = imgaussfilt(l,gaussian);
 end
 
+
+% % if noise > 0
+% 	%toreturn = medfilt2(toreturn);
+% 	toreturn = wiener2(toreturn, [5, 5]);
+% % end
+
 %imshow(toreturn);
+toc
 
 end

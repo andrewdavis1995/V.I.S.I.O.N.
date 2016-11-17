@@ -34,6 +34,9 @@ namespace Pro_saic
         string fileSelected = "";
         int gaussian = 0;
 
+        string[,] filenames = new string[30, 30];
+        string[,] fileDescriptions = new string[30, 30];
+
 
         MLApp.MLApp matlab = new MLApp.MLApp();
 
@@ -49,12 +52,14 @@ namespace Pro_saic
 
             
             // Call the MATLAB function 
-            matlab.Feval("ReadImage", 1, out result, path, rows, columns, gaussian);
+            matlab.Feval("ReadImage", 3, out result, path, rows, columns, gaussian);
 
             // Display result 
             object[] res = result as object[];
 
             byte[,,] bs = res[0] as byte[,,];
+            object[,] files = res[1] as object[,];
+            object[,] descs = res[2] as object[,];
 
             int w = bs.GetLength(1);
             int h = bs.GetLength(0);
@@ -74,9 +79,32 @@ namespace Pro_saic
                 }
             }
 
+            for (int i = 0; i < files.GetLength(0); i++)
+            {
+                for (int j = 0; j < files.GetLength(1); j++)
+                {
+                    try
+                    {
+                        filenames[i, j] = files[i, j].ToString();
+                    }
+                    catch (Exception) { }
+                }
+            }
+
+            for (int i = 0; i < descs.GetLength(0); i++)
+            {
+                for (int j = 0; j < descs.GetLength(1); j++)
+                {
+                    try
+                    {
+                        fileDescriptions[i, j] = descs[i, j].ToString();
+                    }
+                    catch (Exception) { }
+                }
+            }
+
             return bmp;
-
-
+            
         }
 
         //http://stackoverflow.com/questions/22499407/how-to-display-a-bitmap-in-a-wpf-image
@@ -200,6 +228,8 @@ namespace Pro_saic
         {
             rows = (int)trackbarRows.Value;
             columns = (int)trackbarColumns.Value;
+            
+            filenames = new string[rows - 1, columns - 1];
 
             if (checkBoxGaussian.IsChecked == true)
             {
@@ -255,8 +285,56 @@ namespace Pro_saic
                 encoder.Save(stream);
                 stream.Close();
             }
+        }
 
 
+
+        private void imgOutput_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (chkShowImage.IsChecked == true)
+            {
+
+                var p = e.GetPosition(imgOutput);
+
+                double posPercX = (double)((double)p.X / (double)imgOutput.Width);
+
+                var xPos = (int)(posPercX * (columns - 1));
+
+                double posPercY = (double)((double)p.Y / (double)imgOutput.Height);
+
+                var yPos = (int)(posPercY * (rows - 1));
+
+                try
+                {
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(filenames[yPos, xPos]);
+                    image.EndInit();
+                    imgHover.Source = image;
+
+                    Console.WriteLine(yPos + "," + xPos);
+
+                    HoverPanel.Visibility = Visibility.Visible;
+
+                    lblImageDescription.Content = fileDescriptions[yPos, xPos];
+
+                    var mousePosX = (e.GetPosition(null).X);
+                    var mousePosY = e.GetPosition(null).Y;
+
+                    HoverPanel.Margin = new Thickness(mousePosX, mousePosY, 0, 0);
+                }
+                catch (Exception) { imgHover.Source = null; HoverPanel.Visibility = Visibility.Hidden; }
+
+            }
+            else
+            {
+                imgHover.Source = null; HoverPanel.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void imgOutput_MouseLeave(object sender, MouseEventArgs e)
+        {
+            HoverPanel.Visibility = Visibility.Hidden;
         }
     }
 }
